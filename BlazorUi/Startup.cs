@@ -4,9 +4,7 @@
 
 namespace BlazorUi
 {
-    using Blazorise;
-    using Blazorise.Bulma;
-    using Blazorise.Icons.FontAwesome;
+    using GameEngine;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -39,16 +37,9 @@ namespace BlazorUi
         /// <param name="services">IServiceCollection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-              .AddBlazorise(options =>
-              {
-                  options.ChangeTextOnKeyPress = true;
-              })
-              .AddBulmaProviders()
-              .AddFontAwesomeIcons();
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddGameEngineService();
         }
 
         /// <summary>
@@ -73,10 +64,6 @@ namespace BlazorUi
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app?.ApplicationServices
-              .UseBulmaProviders()
-              .UseFontAwesomeIcons();
 
             app.UseEndpoints(endpoints =>
             {

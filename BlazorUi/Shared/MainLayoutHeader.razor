@@ -1,19 +1,10 @@
-﻿<nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item has-background-primary-light" href="">2D War</a>
-
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <NavLink class="navbar-item" href="" Match="NavLinkMatch.All">Home</NavLink>
-            <NavLink class="navbar-item" href="game">Game</NavLink>
-            <NavLink class="navbar-item" href="about">About</NavLink>
-        </div>
-    </div>
-</nav>
+﻿<header>
+    <nav class="pure-menu pure-menu-horizontal">
+        <NavLink class="pure-menu-heading" href="" Match="NavLinkMatch.All">2D War</NavLink>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item pure-menu-selected"><NavLink class="pure-menu-link" href="" Match="NavLinkMatch.All">Home</NavLink></li>
+            <li class="pure-menu-item"><NavLink class="pure-menu-link" href="game" Match="NavLinkMatch.All">Game</NavLink></li>
+            <li class="pure-menu-item"><NavLink class="pure-menu-link" href="about" Match="NavLinkMatch.All">About</NavLink></li>
+        </ul>
+    </nav>
+</header>
