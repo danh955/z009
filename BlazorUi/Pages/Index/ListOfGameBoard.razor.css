@@ -1,0 +1,19 @@
+﻿table {
+    border: none;
+}
+
+td:first-child {
+    padding: 0.25rem 1rem 0.25rem 1rem;
+}
+
+.selected {
+    background-color: greenyellow;
+}
+
+.unselected {
+    cursor: pointer;
+}
+
+    .unselected:hover {
+        background-color: lightgreen;
+    }

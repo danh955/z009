@@ -1,0 +1,22 @@
+﻿<h3>Universes</h3>
+<section>
+    <table>
+        <tbody>
+            @foreach (var gameBoard in this.GameService.GameBoards)
+            {
+                <tr class="@SelectedClass(gameBoard.BoardName)" @onclick="@(e => SelectRow(gameBoard.BoardName))">
+                    <td>@gameBoard.BoardName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <div class="pure-form">
+        <a class="pure-button pure-button-primary" disabled="@IsButtonDisable" href="game\@selectedBoardName">Join Game</a>
+        <button class="pure-button pure-button-primary" disabled="@IsButtonDisable" @onclick="@(e => ClearButton())">Clear</button>
+        <br />
+        <br />
+        <input type="text" @bind="newBoardName" placeholder="New universe name" @onkeyup="@NewBoardNameKeyUp" />
+        <button class="pure-button pure-button-primary" @onclick="@(e => CreateBoard())">Add</button>
+    </div>
+</section>
