@@ -6,6 +6,7 @@ namespace GameEngine
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Game engine service class.
@@ -29,11 +30,29 @@ namespace GameEngine
         }
 
         /// <summary>
+        /// Gets the key that is used in browser storage.
+        /// </summary>
+        public string StorageKey { get; } = "2dWar";
+
+        /// <summary>
         /// Gets a list of game boards.
         /// </summary>
         public IEnumerable<IGameBoard> GameBoards
         {
             get { return this.gameboards.Values; }
+        }
+
+        /// <summary>
+        /// Get the current user.
+        /// </summary>
+        /// <param name="getLocalStorageInfoAsync">A function to get the browsers local storage info.</param>
+        /// <param name="setLocalStorageInfoAsync">An action to set the browsers local storage info.</param>
+        /// <returns>GameUser.</returns>
+        public async Task<GameUser> GetUserAsync(Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync, Func<LocalStorageInfo, Task> setLocalStorageInfoAsync)
+        {
+            GameUser user = new GameUser(getLocalStorageInfoAsync, setLocalStorageInfoAsync);
+            await user.LoadStorageInfoAsync();
+            return user;
         }
 
         /// <summary>
