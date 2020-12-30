@@ -8,20 +8,34 @@ namespace GameEngine
     /// Player class.
     /// This is what the player see and can interact with.
     /// </summary>
-    public class Player : IPlayer
+    public class Player
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Player"/> class.
         /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        internal Player(string userName)
+        /// <param name="id">ID of player.</param>
+        /// <param name="name">Name of the player.</param>
+        /// <param name="user">User.</param>
+        internal Player(int id, string name, GameUser user)
         {
-            this.PlayerName = userName;
+            this.Id = id;
+            this.Name = name;
+            this.User = user;
         }
 
         /// <summary>
-        /// Gets the name of the user.
+        /// Gets id of player.
         /// </summary>
-        public string PlayerName { get; private set; }
+        public int Id { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the player.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets the user playing this game.
+        /// </summary>
+        public GameUser User { get; private set; }
     }
 }

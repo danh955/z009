@@ -1,5 +1,11 @@
-﻿@page "/game/{BoardName}"
+﻿@page "/game/{GameBoardName}"
 @page "/game"
-<h1>Game</h1>
-
-Playing on board @BoardName
+<div class="pure-g">
+    <div class="pure-u-3-5">
+        <h1>Game</h1>
+        Playing on board @GameBoardName
+    </div>
+    <div class="pure-u-2-5">
+        <ListOfPlayers GameBoard="@gameBoard" User="@user" />
+    </div>
+</div>

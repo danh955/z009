@@ -1,0 +1,19 @@
+﻿<h3>Players</h3>
+<section>
+    <table>
+        <tbody>
+            @foreach (var player in this.GameBoard.Players)
+            {
+                <tr>
+                    <td>@player.Id</td>
+                    <td>@player.Name</td>
+                    <td>@player?.User?.UserId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pure-form">
+        <input type="text" disabled="@IsButtonDisable" @bind="newPlayerName" placeholder="Your name" @onkeyup="@NewPlayerNameKeyUp" />
+        <button class="pure-button pure-button-primary" disabled="@IsButtonDisable" @onclick="@(e => AddPlayer())">Join Game</button>
+    </div>
+</section>

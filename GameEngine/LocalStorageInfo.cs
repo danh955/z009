@@ -10,8 +10,8 @@ namespace GameEngine
     public class LocalStorageInfo
     {
         /// <summary>
-        /// Gets or sets local storage ID.
+        /// Gets or sets local storage user ID.
         /// </summary>
-        public string Id { get; set; }
+        public string UserId { get; set; }
     }
 }

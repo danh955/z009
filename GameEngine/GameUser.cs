@@ -5,6 +5,7 @@
 namespace GameEngine
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -13,43 +14,62 @@ namespace GameEngine
     /// </summary>
     public class GameUser
     {
-        private readonly Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync;
-        private readonly Func<LocalStorageInfo, Task> setLocalStorageInfoAsync;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GameUser"/> class.
         /// </summary>
-        /// <param name="getLocalStorageInfoAsync">A function to get the browsers local storage info.</param>
-        /// <param name="setLocalStorageInfoAsync">An action to set the browsers local storage info.</param>
-        internal GameUser(Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync, Func<LocalStorageInfo, Task> setLocalStorageInfoAsync)
+        private GameUser(string userId)
         {
-            this.getLocalStorageInfoAsync = getLocalStorageInfoAsync;
-            this.setLocalStorageInfoAsync = setLocalStorageInfoAsync;
+            this.UserId = userId;
+            this.CreatedTime = DateTime.Now;
         }
 
         /// <summary>
-        /// Gets users browser ID.
+        /// Gets user ID.
         /// </summary>
-        public LocalStorageInfo LocalStorageInfo { get; private set; }
+        public string UserId { get; private set; }
 
         /// <summary>
-        /// Load the browser storage info.
+        /// Gets object created date and time.
         /// </summary>
-        /// <returns>Task.</returns>
-        internal async Task LoadStorageInfoAsync()
+        public DateTime CreatedTime { get; private set; }
+
+        /// <summary>
+        /// Get the current game user class.
+        /// </summary>
+        /// <param name="gameUsers">List of game users.</param>
+        /// <param name="getLocalStorageInfoAsync">A function to get the browsers local storage info.</param>
+        /// <param name="setLocalStorageInfoAsync">An action to set the browsers local storage info.</param>
+        /// <returns>GameUser.</returns>
+        internal static async Task<GameUser> GetUserAsync(
+            Dictionary<string, GameUser> gameUsers,
+            Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync,
+            Func<LocalStorageInfo, Task> setLocalStorageInfoAsync)
         {
-            LocalStorageInfo info = await this.getLocalStorageInfoAsync();
+            LocalStorageInfo info = await getLocalStorageInfoAsync();
 
             if (info == null)
             {
                 info = new LocalStorageInfo
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    UserId = Guid.NewGuid().ToString(),
                 };
-                await this.setLocalStorageInfoAsync(info);
+                await setLocalStorageInfoAsync(info);
+            }
+            else if (string.IsNullOrWhiteSpace(info.UserId))
+            {
+                info.UserId = Guid.NewGuid().ToString();
+                await setLocalStorageInfoAsync(info);
+            }
+            else if (gameUsers.TryGetValue(info.UserId, out GameUser foundUser))
+            {
+                return foundUser;
             }
 
-            this.LocalStorageInfo = info;
+            var user = new GameUser(info.UserId);
+
+            //// TODO: How/when to remove this user from list?  Or is there another way to do this.
+            gameUsers.Add(user.UserId, user);
+            return user;
         }
     }
 }

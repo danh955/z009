@@ -37,7 +37,10 @@ namespace BlazorUi.Pages.Index
         /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            this.user = await this.GameService.GetUserAsync(this.LocalStorage);
+            if (this.user == null)
+            {
+                this.user = await this.GameService.GetUserAsync(this.LocalStorage);
+            }
         }
 
         /// <summary>
