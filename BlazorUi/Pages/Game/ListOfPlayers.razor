@@ -2,12 +2,12 @@
 <section>
     <table>
         <tbody>
-            @foreach (var player in this.GameBoard.Players)
+            @foreach (var player in this.Gameboard.Players)
             {
                 <tr>
                     <td>@player.Id</td>
                     <td>@player.Name</td>
-                    <td>@player?.User?.UserId</td>
+                    <td>@player?.User.Id</td>
                 </tr>
             }
         </tbody>

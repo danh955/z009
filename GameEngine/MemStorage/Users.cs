@@ -1,47 +1,27 @@
-﻿// <copyright file="GameUser.cs" company="None">
+﻿// <copyright file="Users.cs" company="None">
 // Free and open source code.
 // </copyright>
 
-namespace GameEngine
+namespace GameEngine.MemStorage
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// The game user class.
-    /// This is stored at the session level.
+    /// List of users class.
     /// </summary>
-    public class GameUser
+    internal class Users : IUsers
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameUser"/> class.
-        /// </summary>
-        private GameUser(string userId)
-        {
-            this.UserId = userId;
-            this.CreatedTime = DateTime.Now;
-        }
-
-        /// <summary>
-        /// Gets user ID.
-        /// </summary>
-        public string UserId { get; private set; }
-
-        /// <summary>
-        /// Gets object created date and time.
-        /// </summary>
-        public DateTime CreatedTime { get; private set; }
+        private readonly Dictionary<string, User> users = new Dictionary<string, User>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Get the current game user class.
         /// </summary>
-        /// <param name="gameUsers">List of game users.</param>
         /// <param name="getLocalStorageInfoAsync">A function to get the browsers local storage info.</param>
         /// <param name="setLocalStorageInfoAsync">An action to set the browsers local storage info.</param>
         /// <returns>GameUser.</returns>
-        internal static async Task<GameUser> GetUserAsync(
-            Dictionary<string, GameUser> gameUsers,
+        public async Task<IUser> GetUserFromLocalStorageAsync(
             Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync,
             Func<LocalStorageInfo, Task> setLocalStorageInfoAsync)
         {
@@ -60,15 +40,15 @@ namespace GameEngine
                 info.UserId = Guid.NewGuid().ToString();
                 await setLocalStorageInfoAsync(info);
             }
-            else if (gameUsers.TryGetValue(info.UserId, out GameUser foundUser))
+            else if (this.users.TryGetValue(info.UserId, out User foundUser))
             {
                 return foundUser;
             }
 
-            var user = new GameUser(info.UserId);
+            var user = new User(info.UserId);
 
             //// TODO: How/when to remove this user from list?  Or is there another way to do this.
-            gameUsers.Add(user.UserId, user);
+            this.users.Add(user.Id, user);
             return user;
         }
     }

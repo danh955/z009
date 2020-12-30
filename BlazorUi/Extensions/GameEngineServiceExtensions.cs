@@ -19,11 +19,13 @@ namespace BlazorUi.Extensions
         /// <param name="service">GameEngineService.</param>
         /// <param name="localStorage">ILocalStorageService.</param>
         /// <returns>GameUser.</returns>
-        public static async Task<GameUser> GetUserAsync(this GameEngineService service, ILocalStorageService localStorage)
+        public static async Task<IUser> GetUserFromLocalStorageAsync(this GameEngineService service, ILocalStorageService localStorage)
         {
-            return await service.GetUserAsync(
-                            async () => { return await localStorage.GetItemAsync<LocalStorageInfo>(service.StorageKey); },
-                            async (info) => { await localStorage.SetItemAsync(service.StorageKey, info); });
+            const string StorageKey = "2dWar";
+
+            return await service.Users.GetUserFromLocalStorageAsync(
+                            async () => { return await localStorage.GetItemAsync<LocalStorageInfo>(StorageKey); },
+                            async (info) => { await localStorage.SetItemAsync(StorageKey, info); });
         }
     }
 }

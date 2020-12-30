@@ -4,9 +4,7 @@
 
 namespace BlazorUi.Pages.Index
 {
-    using System.Threading.Tasks;
     using Blazored.LocalStorage;
-    using BlazorUi.Extensions;
     using GameEngine;
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Web;
@@ -18,13 +16,9 @@ namespace BlazorUi.Pages.Index
     {
         private string newBoardName;
         private string selectedBoardName;
-        private GameUser user;
 
         [Inject]
         private GameEngineService GameService { get; set; }
-
-        [Inject]
-        private ILocalStorageService LocalStorage { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether a board is NOT selected.
@@ -32,15 +26,6 @@ namespace BlazorUi.Pages.Index
         private bool IsButtonDisable
         {
             get { return string.IsNullOrWhiteSpace(this.selectedBoardName); }
-        }
-
-        /// <inheritdoc/>
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (this.user == null)
-            {
-                this.user = await this.GameService.GetUserAsync(this.LocalStorage);
-            }
         }
 
         /// <summary>
@@ -69,7 +54,7 @@ namespace BlazorUi.Pages.Index
         {
             if (!string.IsNullOrWhiteSpace(this.newBoardName))
             {
-                this.GameService.AddGameBoard(this.newBoardName);
+                this.GameService.Gameboards.AddGameboard(this.newBoardName);
                 this.newBoardName = string.Empty;
             }
         }

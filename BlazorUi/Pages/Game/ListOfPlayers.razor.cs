@@ -19,20 +19,20 @@ namespace BlazorUi.Pages.Game
         /// Gets or sets the game board to play.
         /// </summary>
         [Parameter]
-        public GameBoard GameBoard { get; set; }
+        public IGameboard Gameboard { get; set; }
 
         /// <summary>
         /// Gets or sets game user.
         /// </summary>
         [Parameter]
-        public GameUser User { get; set; }
+        public IUser User { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the player is playing.
         /// </summary>
         private bool IsButtonDisable
         {
-            get { return this.GameBoard.IsUserPlaying(this.User); }
+            get { return this.Gameboard.IsUserPlaying(this.User); }
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace BlazorUi.Pages.Game
         {
             if (!string.IsNullOrWhiteSpace(this.newPlayerName))
             {
-                this.GameBoard.AddPlayer(this.newPlayerName, this.User);
+                this.Gameboard.Players.AddPlayer(this.newPlayerName, this.User);
                 this.newPlayerName = string.Empty;
             }
         }

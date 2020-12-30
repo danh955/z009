@@ -15,14 +15,14 @@ namespace BlazorUi.Pages.Game
     /// </summary>
     public partial class Game
     {
-        private GameBoard gameBoard;
-        private GameUser user;
+        private IGameboard gameboard;
+        private IUser user;
 
         /// <summary>
         /// Gets or sets board name to play.
         /// </summary>
         [Parameter]
-        public string GameBoardName { get; set; }
+        public string GameboardName { get; set; }
 
         [Inject]
         private GameEngineService GameService { get; set; }
@@ -35,7 +35,7 @@ namespace BlazorUi.Pages.Game
         {
             if (this.user == null)
             {
-                this.user = await this.GameService.GetUserAsync(this.LocalStorage);
+                this.user = await this.GameService.GetUserFromLocalStorageAsync(this.LocalStorage);
                 this.StateHasChanged();
             }
         }
@@ -44,7 +44,13 @@ namespace BlazorUi.Pages.Game
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            this.gameBoard = this.GameService.GetGameBoard(this.GameBoardName);
+
+            if (string.IsNullOrWhiteSpace(this.GameboardName))
+            {
+                this.GameboardName = this.GameService.Gameboards.DefaultGameboardName;
+            }
+
+            this.gameboard = this.GameService.Gameboards.GetGameboard(this.GameboardName);
         }
     }
 }

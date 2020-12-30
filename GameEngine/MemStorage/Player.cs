@@ -2,13 +2,12 @@
 // Free and open source code.
 // </copyright>
 
-namespace GameEngine
+namespace GameEngine.MemStorage
 {
     /// <summary>
-    /// Player class.
-    /// This is what the player see and can interact with.
+    /// The player class.
     /// </summary>
-    public class Player
+    internal class Player : IPlayer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Player"/> class.
@@ -16,7 +15,7 @@ namespace GameEngine
         /// <param name="id">ID of player.</param>
         /// <param name="name">Name of the player.</param>
         /// <param name="user">User.</param>
-        internal Player(int id, string name, GameUser user)
+        internal Player(int id, string name, IUser user)
         {
             this.Id = id;
             this.Name = name;
@@ -36,6 +35,6 @@ namespace GameEngine
         /// <summary>
         /// Gets the user playing this game.
         /// </summary>
-        public GameUser User { get; private set; }
+        public IUser User { get; private set; }
     }
 }

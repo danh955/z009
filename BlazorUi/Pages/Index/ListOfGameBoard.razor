@@ -2,10 +2,10 @@
 <section>
     <table>
         <tbody>
-            @foreach (var gameBoard in this.GameService.GameBoards)
+            @foreach (var gameboard in this.GameService.Gameboards)
             {
-                <tr class="@SelectedClass(gameBoard.BoardName)" @onclick="@(e => SelectRow(gameBoard.BoardName))">
-                    <td>@gameBoard.BoardName</td>
+                <tr class="@SelectedClass(gameboard.BoardName)" @onclick="@(e => SelectRow(gameboard.BoardName))">
+                    <td>@gameboard.BoardName</td>
                 </tr>
             }
         </tbody>
