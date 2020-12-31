@@ -5,7 +5,7 @@
 namespace GameEngine.MemStorage
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -13,7 +13,7 @@ namespace GameEngine.MemStorage
     /// </summary>
     internal class Users : IUsers
     {
-        private readonly Dictionary<string, User> users = new Dictionary<string, User>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, User> users = new ConcurrentDictionary<string, User>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Get the current game user class.
@@ -48,8 +48,7 @@ namespace GameEngine.MemStorage
             var user = new User(info.UserId);
 
             //// TODO: How/when to remove this user from list?  Or is there another way to do this.
-            this.users.Add(user.Id, user);
-            return user;
+            return this.users.TryAdd(user.Id, user) ? user : this.users[user.Id];
         }
     }
 }
