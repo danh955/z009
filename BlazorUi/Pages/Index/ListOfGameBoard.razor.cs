@@ -4,7 +4,6 @@
 
 namespace BlazorUi.Pages.Index
 {
-    using Blazored.LocalStorage;
     using GameEngine;
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Web;
