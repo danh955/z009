@@ -15,9 +15,9 @@ namespace GameEngine
         /// <summary>
         /// Get the current game user class.
         /// </summary>
-        /// <param name="getLocalStorageInfoAsync">A function to get the browsers local storage info.</param>
-        /// <param name="setLocalStorageInfoAsync">An action to set the browsers local storage info.</param>
+        /// <param name="getBrowserLocalStorageAsync">A function to get the browsers local storage.</param>
+        /// <param name="setBrowserLocalStorageAsync">An action to set the browsers local storage.</param>
         /// <returns>GameUser.</returns>
-        Task<IUser> GetUserFromLocalStorageAsync(Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync, Func<LocalStorageInfo, Task> setLocalStorageInfoAsync);
+        Task<IUser> GetUserFromLocalStorageAsync(Func<Task<BrowserLocalStorage>> getBrowserLocalStorageAsync, Func<BrowserLocalStorage, Task> setBrowserLocalStorageAsync);
     }
 }

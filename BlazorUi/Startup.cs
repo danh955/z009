@@ -41,7 +41,7 @@ namespace BlazorUi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddGameEngineService();
+            services.AddGameEngineService<SessionService>();
             services.AddBlazoredLocalStorage();
             services.AddScoped<SessionDataService>();
         }

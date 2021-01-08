@@ -18,34 +18,34 @@ namespace GameEngine.MemStorage
         /// <summary>
         /// Get the current game user class.
         /// </summary>
-        /// <param name="getLocalStorageInfoAsync">A function to get the browsers local storage info.</param>
-        /// <param name="setLocalStorageInfoAsync">An action to set the browsers local storage info.</param>
+        /// <param name="getBrowserLocalStorageAsync">A function to get the browsers local storage info.</param>
+        /// <param name="setBrowserLocalStorageAsync">An action to set the browsers local storage info.</param>
         /// <returns>GameUser.</returns>
         public async Task<IUser> GetUserFromLocalStorageAsync(
-            Func<Task<LocalStorageInfo>> getLocalStorageInfoAsync,
-            Func<LocalStorageInfo, Task> setLocalStorageInfoAsync)
+            Func<Task<BrowserLocalStorage>> getBrowserLocalStorageAsync,
+            Func<BrowserLocalStorage, Task> setBrowserLocalStorageAsync)
         {
-            LocalStorageInfo info = await getLocalStorageInfoAsync();
+            BrowserLocalStorage data = await getBrowserLocalStorageAsync();
 
-            if (info == null)
+            if (data == null)
             {
-                info = new LocalStorageInfo
+                data = new BrowserLocalStorage
                 {
                     UserId = Guid.NewGuid().ToString(),
                 };
-                await setLocalStorageInfoAsync(info);
+                await setBrowserLocalStorageAsync(data);
             }
-            else if (string.IsNullOrWhiteSpace(info.UserId))
+            else if (string.IsNullOrWhiteSpace(data.UserId))
             {
-                info.UserId = Guid.NewGuid().ToString();
-                await setLocalStorageInfoAsync(info);
+                data.UserId = Guid.NewGuid().ToString();
+                await setBrowserLocalStorageAsync(data);
             }
-            else if (this.users.TryGetValue(info.UserId, out User foundUser))
+            else if (this.users.TryGetValue(data.UserId, out User foundUser))
             {
                 return foundUser;
             }
 
-            var user = new User(info.UserId);
+            var user = new User(data.UserId);
 
             //// TODO: How/when to remove this user from list?  Or is there another way to do this.
             return this.users.TryAdd(user.Id, user) ? user : this.users[user.Id];

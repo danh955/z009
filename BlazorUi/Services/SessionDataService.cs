@@ -57,8 +57,8 @@ namespace BlazorUi.Services
                 const string StorageKey = "2dWar";
 
                 this.user = await this.gameService.Users.GetUserFromLocalStorageAsync(
-                                async () => { return await this.localStorage.GetItemAsync<LocalStorageInfo>(StorageKey); },
-                                async (info) => { await this.localStorage.SetItemAsync(StorageKey, info); });
+                                async () => { return await this.localStorage.GetItemAsync<BrowserLocalStorage>(StorageKey); },
+                                async (data) => { await this.localStorage.SetItemAsync(StorageKey, data); });
             }
         }
 
