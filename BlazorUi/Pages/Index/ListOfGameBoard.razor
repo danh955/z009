@@ -2,7 +2,7 @@
 <section>
     <table>
         <tbody>
-            @foreach (var gameboard in this.GameService.Gameboards)
+            @foreach (var gameboard in this.Session.Gameboards)
             {
                 <tr class="@SelectedClass(gameboard.BoardName)" @onclick="@(e => SelectRow(gameboard.BoardName))">
                     <td>@gameboard.BoardName</td>

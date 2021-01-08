@@ -14,7 +14,7 @@ namespace BlazorUi.Shared
     public partial class Services
     {
         [Inject]
-        private SessionDataService Session { get; set; }
+        private SessionService Session { get; set; }
 
         /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)

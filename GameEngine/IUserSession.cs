@@ -18,5 +18,10 @@ namespace GameEngine
         /// Gets user ID.
         /// </summary>
         string UserId { get; }
+
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        IUser User { get; }
     }
 }

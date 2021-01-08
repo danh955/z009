@@ -9,7 +9,7 @@ namespace GameEngine.MemStorage
     /// <summary>
     /// User session class.
     /// </summary>
-    public class UserSession : IUserSession
+    internal class UserSession : IUserSession
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserSession"/> class.
@@ -22,14 +22,32 @@ namespace GameEngine.MemStorage
         }
 
         /// <inheritdoc/>
-        public string SessionId { get; internal set; }
+        string IUserSession.SessionId => this.SessionId;
 
         /// <inheritdoc/>
-        public string UserId { get; internal set; }
+        IUser IUserSession.User => this.User;
+
+        /// <inheritdoc/>
+        string IUserSession.UserId => this.UserId;
 
         /// <summary>
         /// Gets object created date and time.
         /// </summary>
-        public DateTime CreatedTime { get; private set; }
+        internal DateTime CreatedTime { get; private set; }
+
+        /// <summary>
+        /// Gets or sets session ID.
+        /// </summary>
+        internal string SessionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets user.
+        /// </summary>
+        internal User User { get; set; }
+
+        /// <summary>
+        /// Gets or sets user ID.
+        /// </summary>
+        internal string UserId { get; set; }
     }
 }

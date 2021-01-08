@@ -5,6 +5,7 @@
 namespace BlazorUi
 {
     using Blazored.LocalStorage;
+    using Blazored.SessionStorage;
     using BlazorUi.Services;
     using GameEngine;
     using Microsoft.AspNetCore.Builder;
@@ -41,9 +42,9 @@ namespace BlazorUi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddGameEngineService<SessionService>();
             services.AddBlazoredLocalStorage();
-            services.AddScoped<SessionDataService>();
+            services.AddBlazoredSessionStorage();
+            services.AddGameEngineService<SessionService>();
         }
 
         /// <summary>

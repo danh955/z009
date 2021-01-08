@@ -21,7 +21,7 @@ namespace GameEngine.MemStorage
         /// <param name="getBrowserSessionStorageAsync">A function to get the browsers session storage.</param>
         /// <param name="setBrowserSessionStorageAsync">An action to set the browsers session storage.</param>
         /// <returns>IUserSession.</returns>
-        public async Task<IUserSession> GetUserSessionFromSessionStorageAsync(
+        internal async Task<UserSession> GetUserSessionFromSessionStorageAsync(
             Func<Task<BrowserSessionStorage>> getBrowserSessionStorageAsync,
             Func<BrowserSessionStorage, Task> setBrowserSessionStorageAsync)
         {

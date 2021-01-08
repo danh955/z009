@@ -21,7 +21,7 @@ namespace GameEngine.MemStorage
         /// <param name="getBrowserLocalStorageAsync">A function to get the browsers local storage info.</param>
         /// <param name="setBrowserLocalStorageAsync">An action to set the browsers local storage info.</param>
         /// <returns>GameUser.</returns>
-        public async Task<IUser> GetUserFromLocalStorageAsync(
+        internal async Task<User> GetUserFromLocalStorageAsync(
             Func<Task<BrowserLocalStorage>> getBrowserLocalStorageAsync,
             Func<BrowserLocalStorage, Task> setBrowserLocalStorageAsync)
         {

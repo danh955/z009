@@ -22,22 +22,19 @@ namespace BlazorUi.Pages.Game
         public string GameboardName { get; set; }
 
         [Inject]
-        private GameEngineService GameService { get; set; }
-
-        [Inject]
-        private SessionDataService Session { get; set; }
+        private SessionService Session { get; set; }
 
         /// <inheritdoc/>
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
-            if (this.Session.SetGameBoardName(this.GameboardName, this.Session.GameboardName, this.GameService.Gameboards.DefaultGameboardName))
+            if (this.Session.SetGameBoardName(this.GameboardName, this.Session.GameboardName, this.Session.Gameboards.DefaultGameboardName))
             {
                 this.StateHasChanged();
             }
 
-            this.gameboard = this.GameService.Gameboards.GetGameboard(this.Session.GameboardName);
+            this.gameboard = this.Session.Gameboards.GetGameboard(this.Session.GameboardName);
         }
     }
 }
