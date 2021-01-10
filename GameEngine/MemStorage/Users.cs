@@ -6,6 +6,7 @@ namespace GameEngine.MemStorage
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -18,14 +19,20 @@ namespace GameEngine.MemStorage
         /// <summary>
         /// Get the current game user class.
         /// </summary>
-        /// <param name="getBrowserLocalStorageAsync">A function to get the browsers local storage info.</param>
-        /// <param name="setBrowserLocalStorageAsync">An action to set the browsers local storage info.</param>
+        /// <param name="gameSessionService">GameSessionService.</param>
+        /// <param name="userId">User ID.</param>
         /// <returns>GameUser.</returns>
-        internal async Task<User> GetUserFromLocalStorageAsync(
-            Func<Task<BrowserLocalStorage>> getBrowserLocalStorageAsync,
-            Func<BrowserLocalStorage, Task> setBrowserLocalStorageAsync)
+        internal async Task<User> GetUserAsync(GameSessionService gameSessionService, string userId = null)
         {
-            BrowserLocalStorage data = await getBrowserLocalStorageAsync();
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                if (this.users.TryGetValue(userId, out User value))
+                {
+                    return value;
+                }
+            }
+
+            BrowserLocalStorage data = await gameSessionService.GetBrowserLocalStorageAsync();
 
             if (data == null)
             {
@@ -33,12 +40,12 @@ namespace GameEngine.MemStorage
                 {
                     UserId = Guid.NewGuid().ToString(),
                 };
-                await setBrowserLocalStorageAsync(data);
+                await gameSessionService.SetBrowserLocalStorageAsync(data);
             }
             else if (string.IsNullOrWhiteSpace(data.UserId))
             {
                 data.UserId = Guid.NewGuid().ToString();
-                await setBrowserLocalStorageAsync(data);
+                await gameSessionService.SetBrowserLocalStorageAsync(data);
             }
             else if (this.users.TryGetValue(data.UserId, out User foundUser))
             {

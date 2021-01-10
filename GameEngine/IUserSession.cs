@@ -15,11 +15,6 @@ namespace GameEngine
         string SessionId { get; }
 
         /// <summary>
-        /// Gets user ID.
-        /// </summary>
-        string UserId { get; }
-
-        /// <summary>
         /// Gets the user.
         /// </summary>
         IUser User { get; }

@@ -16,16 +16,14 @@ namespace GameEngine.MemStorage
         private readonly ConcurrentDictionary<string, UserSession> sessions = new ConcurrentDictionary<string, UserSession>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Get the current game user class.
+        /// Get the current game session from the browser session storage.
         /// </summary>
-        /// <param name="getBrowserSessionStorageAsync">A function to get the browsers session storage.</param>
-        /// <param name="setBrowserSessionStorageAsync">An action to set the browsers session storage.</param>
+        /// <param name="service">GameSessionService.</param>
         /// <returns>IUserSession.</returns>
-        internal async Task<UserSession> GetUserSessionFromSessionStorageAsync(
-            Func<Task<BrowserSessionStorage>> getBrowserSessionStorageAsync,
-            Func<BrowserSessionStorage, Task> setBrowserSessionStorageAsync)
+        internal async Task<UserSession> GetUserSessionAsync(GameSessionService service)
         {
-            BrowserSessionStorage data = await getBrowserSessionStorageAsync();
+            bool saveBrowserStorage = false;
+            BrowserSessionStorage data = await service.GetBrowserSessionStorageAsync();
 
             if (data == null)
             {
@@ -33,22 +31,43 @@ namespace GameEngine.MemStorage
                 {
                     SessionId = Guid.NewGuid().ToString(),
                 };
-                await setBrowserSessionStorageAsync(data);
+                saveBrowserStorage = true;
             }
-            else if (string.IsNullOrWhiteSpace(data.UserId))
+            else if (string.IsNullOrWhiteSpace(data.SessionId))
             {
                 data.SessionId = Guid.NewGuid().ToString();
-                await setBrowserSessionStorageAsync(data);
+                saveBrowserStorage = true;
             }
-            else if (this.sessions.TryGetValue(data.UserId, out UserSession foundUser))
+            else if (this.sessions.TryGetValue(data.SessionId, out UserSession foundSession))
             {
-                return foundUser;
+                await SetUserAsync(foundSession, service, data, saveBrowserStorage);
+                return foundSession;
             }
 
             var session = new UserSession(data.SessionId);
+            await SetUserAsync(session, service, data, saveBrowserStorage);
 
             //// TODO: How/when to remove this user from list?  Or is there another way to do this.
             return this.sessions.TryAdd(session.SessionId, session) ? session : this.sessions[session.SessionId];
+        }
+
+        private static async Task SetUserAsync(UserSession session, GameSessionService service, BrowserSessionStorage data, bool saveBrowserStorage)
+        {
+            if (session.User == null)
+            {
+                session.User = await service.GameEngineService.Users.GetUserAsync(service, data.UserId);
+            }
+
+            if (string.IsNullOrWhiteSpace(data.UserId))
+            {
+                data.UserId = session.User.Id;
+                saveBrowserStorage = true;
+            }
+
+            if (saveBrowserStorage)
+            {
+                await service.SetBrowserSessionStorageAsync(data);
+            }
         }
     }
 }

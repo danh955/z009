@@ -1,19 +1,20 @@
-﻿// <copyright file="GameUserSessionService.cs" company="None">
+﻿// <copyright file="GameSessionService.cs" company="None">
 // Free and open source code.
 // </copyright>
 
 namespace GameEngine
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using GameEngine.MemStorage;
 
     /// <summary>
-    /// Abstract game user session service.
+    /// Abstract game user session service class.
     /// This must be inherit and applied as a scoped service in the UI.
     /// </summary>
     public abstract class GameSessionService
     {
-        private readonly GameEngineService gameEngineService;
+        private readonly SemaphoreSlim initSemaphoreSlim = new SemaphoreSlim(1, 1);
         private UserSession session;
 
         /// <summary>
@@ -22,18 +23,23 @@ namespace GameEngine
         /// <param name="gameEngineService">GameEngineService.</param>
         public GameSessionService(GameEngineService gameEngineService)
         {
-            this.gameEngineService = gameEngineService;
+            this.GameEngineService = gameEngineService;
         }
 
         /// <summary>
         ///  Gets list of game boards.
         /// </summary>
-        public IGameboards Gameboards => this.gameEngineService.Gameboards;
+        public IGameboards Gameboards => this.GameEngineService.Gameboards;
 
         /// <summary>
         /// Gets this user.
         /// </summary>
         public IUser User => this.session?.User;
+
+        /// <summary>
+        /// Gets game engine service.
+        /// </summary>
+        internal GameEngineService GameEngineService { get; private set; }
 
         /// <summary>
         /// Initialize service.
@@ -44,12 +50,18 @@ namespace GameEngine
         {
             if (this.session == null)
             {
-                this.session = await this.gameEngineService.UserSessions.GetUserSessionFromSessionStorageAsync(this.GetBrowserSessionStorageAsync, this.SetBrowserSessionStorageAsync);
-            }
-
-            if (this.session.User == null)
-            {
-                this.session.User = await this.gameEngineService.Users.GetUserFromLocalStorageAsync(this.GetBrowserLocalStorageAsync, this.SetBrowserLocalStorageAsync);
+                await this.initSemaphoreSlim.WaitAsync(20000);
+                try
+                {
+                    if (this.session == null)
+                    {
+                        this.session = await this.GameEngineService.UserSessions.GetUserSessionAsync(this);
+                    }
+                }
+                finally
+                {
+                    this.initSemaphoreSlim.Release();
+                }
             }
         }
 
@@ -57,26 +69,26 @@ namespace GameEngine
         /// Get the browser local storage data.
         /// </summary>
         /// <returns>BrowserLocalStorage.</returns>
-        protected abstract Task<BrowserLocalStorage> GetBrowserLocalStorageAsync();
+        protected internal abstract Task<BrowserLocalStorage> GetBrowserLocalStorageAsync();
 
         /// <summary>
         /// Get the browser session storage data.
         /// </summary>
         /// <returns>BrowserSessionStorage.</returns>
-        protected abstract Task<BrowserSessionStorage> GetBrowserSessionStorageAsync();
+        protected internal abstract Task<BrowserSessionStorage> GetBrowserSessionStorageAsync();
 
         /// <summary>
         /// Set the browser local storage data.
         /// </summary>
         /// <param name="localStorage">BrowserLocalStorage.</param>
         /// <returns>Task.</returns>
-        protected abstract Task SetBrowserLocalStorageAsync(BrowserLocalStorage localStorage);
+        protected internal abstract Task SetBrowserLocalStorageAsync(BrowserLocalStorage localStorage);
 
         /// <summary>
         /// Set the browser session storage data.
         /// </summary>
         /// <param name="sessionStorage">BrowserSessionStorage.</param>
         /// <returns>Task.</returns>
-        protected abstract Task SetBrowserSessionStorageAsync(BrowserSessionStorage sessionStorage);
+        protected internal abstract Task SetBrowserSessionStorageAsync(BrowserSessionStorage sessionStorage);
     }
 }
