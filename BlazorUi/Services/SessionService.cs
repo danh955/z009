@@ -11,8 +11,9 @@ namespace BlazorUi.Services
 
     /// <summary>
     /// Session service class.
+    /// SessionService is for the UI.  GameSessionService is for the game engine access.
     /// </summary>
-    public class SessionService : GameUserSessionService
+    public class SessionService : GameSessionService
     {
         private const string StorageKey = "2dWar";
         private readonly ILocalStorageService localStorageService;

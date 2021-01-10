@@ -11,16 +11,16 @@ namespace GameEngine
     /// Abstract game user session service.
     /// This must be inherit and applied as a scoped service in the UI.
     /// </summary>
-    public abstract class GameUserSessionService
+    public abstract class GameSessionService
     {
         private readonly GameEngineService gameEngineService;
         private UserSession session;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameUserSessionService"/> class.
+        /// Initializes a new instance of the <see cref="GameSessionService"/> class.
         /// </summary>
         /// <param name="gameEngineService">GameEngineService.</param>
-        public GameUserSessionService(GameEngineService gameEngineService)
+        public GameSessionService(GameEngineService gameEngineService)
         {
             this.gameEngineService = gameEngineService;
         }

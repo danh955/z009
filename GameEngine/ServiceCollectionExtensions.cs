@@ -18,7 +18,7 @@ namespace GameEngine
         /// <param name="service">IServiceCollection.</param>
         /// <returns>Service collection.</returns>
         public static IServiceCollection AddGameEngineService<TService>(this IServiceCollection service)
-            where TService : GameUserSessionService
+            where TService : GameSessionService
         {
             service.AddSingleton<GameEngineService>(_ => new GameEngineService());
             service.AddScoped<TService>();
