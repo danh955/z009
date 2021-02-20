@@ -4,8 +4,7 @@
 
 namespace BlazorUi.Pages.Index
 {
-    using Blazored.LocalStorage;
-    using GameEngine;
+    using BlazorUi.Services;
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Web;
 
@@ -18,7 +17,7 @@ namespace BlazorUi.Pages.Index
         private string selectedBoardName;
 
         [Inject]
-        private GameEngineService GameService { get; set; }
+        private SessionService Session { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether a board is NOT selected.
@@ -54,7 +53,7 @@ namespace BlazorUi.Pages.Index
         {
             if (!string.IsNullOrWhiteSpace(this.newBoardName))
             {
-                this.GameService.Gameboards.AddGameboard(this.newBoardName);
+                this.Session.Gameboards.AddGameboard(this.newBoardName);
                 this.newBoardName = string.Empty;
             }
         }

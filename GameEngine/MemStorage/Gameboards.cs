@@ -6,6 +6,7 @@ namespace GameEngine.MemStorage
 {
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
 
     /// <summary>
@@ -14,7 +15,7 @@ namespace GameEngine.MemStorage
     /// </summary>
     internal class Gameboards : IGameboards
     {
-        private readonly Dictionary<string, Gameboard> gameboards = new Dictionary<string, Gameboard>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, Gameboard> gameboards = new ConcurrentDictionary<string, Gameboard>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemStorage.Gameboards"/> class.
@@ -44,13 +45,7 @@ namespace GameEngine.MemStorage
         /// <returns>True if created.  False if duplicate name.</returns>
         public bool AddGameboard(string boardName)
         {
-            if (this.gameboards.ContainsKey(boardName))
-            {
-                return false;
-            }
-
-            this.gameboards.Add(boardName, new Gameboard(boardName));
-            return true;
+            return this.gameboards.TryAdd(boardName, new Gameboard(boardName));
         }
 
         /// <inheritdoc/>

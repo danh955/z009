@@ -6,6 +6,7 @@ namespace GameEngine.MemStorage
 {
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Threading;
 
@@ -14,7 +15,7 @@ namespace GameEngine.MemStorage
     /// </summary>
     internal class Players : IPlayers
     {
-        private readonly Dictionary<string, Player> players = new Dictionary<string, Player>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, Player> players = new ConcurrentDictionary<string, Player>(StringComparer.OrdinalIgnoreCase);
         private int nextPlayerId;
 
         /// <summary>
@@ -32,8 +33,7 @@ namespace GameEngine.MemStorage
 
             int playerId = Interlocked.Increment(ref this.nextPlayerId);
             player = new Player(playerId, playerName, user);
-            this.players.Add(playerName, player);
-            return player;
+            return this.players.TryAdd(player.Name, player) ? player : this.players[playerName];
         }
 
         /// <inheritdoc/>

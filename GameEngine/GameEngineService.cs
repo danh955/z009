@@ -11,9 +11,6 @@ namespace GameEngine
     /// </summary>
     public class GameEngineService
     {
-        private readonly Gameboards gameboards = new Gameboards();
-        private readonly Users users = new Users();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GameEngineService"/> class.
         /// </summary>
@@ -24,11 +21,16 @@ namespace GameEngine
         /// <summary>
         /// Gets list of game boards.
         /// </summary>
-        public IGameboards Gameboards => this.gameboards;
+        internal Gameboards Gameboards { get; private set; } = new Gameboards();
 
         /// <summary>
-        /// Gets list of users.
+        /// Gets users.
         /// </summary>
-        public IUsers Users => this.users;
+        internal Users Users { get; private set; } = new Users();
+
+        /// <summary>
+        /// Gets the user sessions.
+        /// </summary>
+        internal UserSessions UserSessions { get; private set; } = new UserSessions();
     }
 }
